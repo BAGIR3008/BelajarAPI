@@ -15,12 +15,13 @@ func main() {
 	cfg := config.InitConfig()
 	db := config.InitSQL(cfg)
 
-	m := model.UserModel{Connection: db}
+	m := model.Models{Connection: db}
 	c := controller.UserController{Model: m}
 	config.Migrate(db, m.User)
+	config.Migrate(db, m.Activity)
 
 	e.Pre(middleware.RemoveTrailingSlash())
-	e.Use(middleware.Logger())
+	// e.Use(middleware.Logger())
 	e.Use(middleware.CORS())
 	routes.InitRoute(e, c)
 	e.Logger.Fatal(e.Start("127.0.0.1:8000"))

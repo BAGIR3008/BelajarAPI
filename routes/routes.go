@@ -15,8 +15,8 @@ func InitRoute(e *echo.Echo, c controller.UserController) {
 
 	e.POST("/login", c.Login())
 	e.POST("/register", c.Register())
-	// e.GET("/users", c.GetUsers(), jwtMiddleware)
-	e.GET("/profile", c.GetUserByID(), jwtMiddleware)
-	e.DELETE("/delete", c.DeleteUserByID(), jwtMiddleware)
-	e.PUT("/update", c.UpdateUserByID(), jwtMiddleware)
+	e.GET("/profile", c.Profile(), jwtMiddleware)
+	e.POST("/activity", c.Add_Activity(), jwtMiddleware)
+	e.PUT("/activity/:id", c.Edit_Activity(), jwtMiddleware)
+	e.GET("/activities", c.Get_Activities(), jwtMiddleware)
 }

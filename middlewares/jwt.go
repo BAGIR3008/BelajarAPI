@@ -22,3 +22,14 @@ func GenerateJWT(email string) (string, error) {
 		return result, nil
 	}
 }
+
+func DecodeToken(i interface{}) string {
+	var claim = i.(*jwt.Token).Claims.(jwt.MapClaims)
+	var result string
+
+	if val, found := claim["email"]; found {
+		result = val.(string)
+	}
+
+	return result
+}
