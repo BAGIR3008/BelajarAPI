@@ -1,4 +1,4 @@
-package message
+package user
 
 type LoginRequest struct {
 	Email    string `json:"email" form:"email" gorm:"unique" validate:"required,email"`

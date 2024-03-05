@@ -1,4 +1,4 @@
-package model
+package user
 
 import (
 	"strings"
@@ -13,13 +13,12 @@ type User struct {
 	Password string `json:"password" form:"password"`
 }
 
-type Models struct {
+type UserModel struct {
 	Connection *gorm.DB
 	User       User
-	Activity   Activity
 }
 
-func (um *Models) CheckByID(id int) bool {
+func (um *UserModel) CheckByID(id int) bool {
 	var user User
 	err := um.Connection.Where("id = ?", uint(id)).Find(&user).Error
 	if err != nil || user.Name == "" {
@@ -29,7 +28,7 @@ func (um *Models) CheckByID(id int) bool {
 	return true
 }
 
-func (um *Models) CheckByEmail(email string) bool {
+func (um *UserModel) CheckByEmail(email string) bool {
 	var user User
 	err := um.Connection.Find(&user, User{Email: email}).Error
 	if err != nil || user.Email == "" {
@@ -39,7 +38,7 @@ func (um *Models) CheckByEmail(email string) bool {
 	return true
 }
 
-func (um *Models) GetUsers() ([]User, error) {
+func (um *UserModel) GetUsers() ([]User, error) {
 	var users []User
 	err := um.Connection.Find(&users).Error
 	if err != nil {
@@ -49,7 +48,7 @@ func (um *Models) GetUsers() ([]User, error) {
 	}
 }
 
-func (um *Models) GetUserByID(id int) (User, error) {
+func (um *UserModel) GetUserByID(id int) (User, error) {
 	var user User
 	err := um.Connection.Where("id = ?", uint(id)).Find(&user).Error
 	if err != nil {
@@ -61,7 +60,7 @@ func (um *Models) GetUserByID(id int) (User, error) {
 	}
 }
 
-func (um *Models) DeleteUserByID(id int) (bool, error) {
+func (um *UserModel) DeleteUserByID(id int) (bool, error) {
 	var user User
 	query := um.Connection.Delete(&user, id)
 	if err := query.Error; err != nil {
@@ -73,7 +72,7 @@ func (um *Models) DeleteUserByID(id int) (bool, error) {
 	}
 }
 
-func (um *Models) UpdateUserByID(id int, user User) error {
+func (um *UserModel) UpdateUserByID(id int, user User) error {
 	query := um.Connection.Where("id = ?", uint(id)).Model(&user).Updates(&user)
 	if err := query.Error; err != nil {
 		return err
@@ -82,7 +81,7 @@ func (um *Models) UpdateUserByID(id int, user User) error {
 	}
 }
 
-func (um *Models) Login(email string, password string) (User, error) {
+func (um *UserModel) Login(email string, password string) (User, error) {
 	var result User
 	err := um.Connection.Where("email = ? AND password = ?", email, password).Find(&result).Error
 	if err != nil {
@@ -94,7 +93,7 @@ func (um *Models) Login(email string, password string) (User, error) {
 	}
 }
 
-func (um *Models) Register(newUser *User) (bool, error) {
+func (um *UserModel) Register(newUser *User) (bool, error) {
 	err := um.Connection.Create(&newUser).Error
 	if err != nil {
 		if contain := strings.Contains(err.Error(), "Duplicate entry"); contain {
@@ -107,7 +106,7 @@ func (um *Models) Register(newUser *User) (bool, error) {
 	}
 }
 
-func (um *Models) Profile(email string) (User, error) {
+func (um *UserModel) Profile(email string) (User, error) {
 	var result User
 	err := um.Connection.Where("email = ?", email).Find(&result).Error
 	if err != nil {

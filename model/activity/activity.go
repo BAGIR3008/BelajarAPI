@@ -1,4 +1,4 @@
-package model
+package activity
 
 import (
 	"strings"
@@ -12,7 +12,12 @@ type Activity struct {
 	Do    string `json:"do" form:"do"`
 }
 
-func (m *Models) Add_Activity(activity *Activity) (bool, error) {
+type ActivityModel struct {
+	Connection *gorm.DB
+	Activity   Activity
+}
+
+func (m *ActivityModel) Add_Activity(activity *Activity) (bool, error) {
 	err := m.Connection.Create(&activity).Error
 	if err != nil {
 		if contain := strings.Contains(err.Error(), "Duplicate entry"); contain {
@@ -25,7 +30,7 @@ func (m *Models) Add_Activity(activity *Activity) (bool, error) {
 	}
 }
 
-func (m *Models) Edit_Activity(id int, activity *Activity) error {
+func (m *ActivityModel) Edit_Activity(id int, activity *Activity) error {
 	query := m.Connection.Where("id = ?", uint(id)).Model(&activity).Updates(&activity)
 	if err := query.Error; err != nil {
 		return err
@@ -34,7 +39,7 @@ func (m *Models) Edit_Activity(id int, activity *Activity) error {
 	}
 }
 
-func (m *Models) Get_Activities(email string) ([]Activity, error) {
+func (m *ActivityModel) Get_Activities(email string) ([]Activity, error) {
 	var activities []Activity
 	err := m.Connection.Where("email = ?", email).Find(&activities).Error
 	if err != nil {
