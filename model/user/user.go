@@ -1,6 +1,7 @@
 package user
 
 import (
+	"BelajarAPI/model/activity"
 	"strings"
 
 	"gorm.io/gorm"
@@ -8,9 +9,10 @@ import (
 
 type User struct {
 	gorm.Model
-	Name     string `json:"name" form:"name"`
-	Email    string `json:"email" form:"email" gorm:"unique"`
-	Password string `json:"password" form:"password"`
+	Name       string              `json:"name" form:"name"`
+	Email      string              `json:"email" form:"email" gorm:"unique"`
+	Password   string              `json:"password" form:"password"`
+	Activities []activity.Activity `gorm:"foreignKey:Email;references:Email"`
 }
 
 type UserModel struct {

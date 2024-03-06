@@ -57,7 +57,7 @@ func (us *ActivityController) Edit_Activity() echo.HandlerFunc {
 
 		activity.Email = middlewares.DecodeToken(c.Get("user"))
 
-		err := us.Model.Edit_Activity(id, &activity)
+		err := us.Model.Edit_Activity(id, activity.Email, &activity)
 		if err != nil {
 			log.Println(err.Error())
 			return c.JSON(tools.Response(http.StatusInternalServerError, "An error occurred while checking the activity"))

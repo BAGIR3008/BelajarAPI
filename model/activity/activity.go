@@ -7,9 +7,9 @@ import (
 )
 
 type Activity struct {
-	gorm.Model
+	ID    uint `gorm:"primarykey"`
 	Email string
-	Do    string `json:"do" form:"do"`
+	Do    string
 }
 
 type ActivityModel struct {
@@ -30,8 +30,8 @@ func (m *ActivityModel) Add_Activity(activity *Activity) (bool, error) {
 	}
 }
 
-func (m *ActivityModel) Edit_Activity(id int, activity *Activity) error {
-	query := m.Connection.Where("id = ?", uint(id)).Model(&activity).Updates(&activity)
+func (m *ActivityModel) Edit_Activity(id int, email string, activity *Activity) error {
+	query := m.Connection.Where("id = ? AND email = ?", uint(id), email).Updates(&activity)
 	if err := query.Error; err != nil {
 		return err
 	} else {
