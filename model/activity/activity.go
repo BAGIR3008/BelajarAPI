@@ -7,8 +7,8 @@ import (
 )
 
 type Activity struct {
-	ID    uint `gorm:"primarykey"`
-	Email string
+	ID    uint   `gorm:"primarykey"`
+	Email string `gorm:"type:varchar(40);"`
 	Do    string
 }
 

@@ -20,8 +20,8 @@ func main() {
 	am := model.Activity(db)
 	ac := controller.Activity(am)
 
-	config.Migrate(db, um.User)
-	config.Migrate(db, am.Activity)
+	// config.Migrate(db, um.User)
+	// config.Migrate(db, am.Activity)
 
 	e.Pre(middleware.RemoveTrailingSlash())
 	// e.Use(middleware.Logger())

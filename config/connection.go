@@ -1,6 +1,8 @@
 package config
 
 import (
+	"BelajarAPI/model/activity"
+	"BelajarAPI/model/user"
 	"fmt"
 	"os"
 
@@ -70,10 +72,12 @@ func InitSQL(c AppConfig) *gorm.DB {
 		return nil
 	}
 
+	db.AutoMigrate(&user.User{}, &activity.Activity{})
+
 	return db
 }
 
 func Migrate(connection *gorm.DB, data interface{}) error {
-	err := connection.AutoMigrate(&data)
+	err := connection.AutoMigrate(&user.User{}, &activity.Activity{})
 	return err
 }
