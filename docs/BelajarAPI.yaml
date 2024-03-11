@@ -1,0 +1,367 @@
+openapi: 3.0.0
+info:
+  version: "1.0.0"
+  title: "API List Activity"
+  description:
+    A simple API to organize activities
+  contact:
+    name: "bagir"
+    email: "bagir3008@gmail.com"
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/BAGIR3008/activityAPI/1.0.0
+  - description: local development
+    url: 'localhost:8000/'
+  - description: production
+    url: 'https://domainkalian.net/{versi}'
+    variables:
+      versi:
+        default: v1
+        enum: 
+          - v1
+          - v2
+tags:
+  - name: user
+    description: Organize data user
+  - name: activity
+    description: Organize data activity
+paths:
+  /login:
+    post:
+      tags:
+        - user
+      summary: "user login"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            example:
+              email: "bagir@mail.com"
+              password: "12345678"
+            schema:
+              $ref: '#/components/schemas/Login'
+      responses:
+        '200':
+          description: "success login"
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: uint
+                  message:
+                    type: string
+                  user:
+                    type: object
+                    properties:
+                      Name: 
+                        type: string
+                      Email: 
+                        type: string
+                      Token: 
+                        type: string
+              example: 
+                code: 200
+                message: "login successful"
+                data:
+                  Nama: "bagir"
+                  Email: "bagir@mail.com"
+                  Token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJhZ2lyQG1haWwuY29tIiwiZXhwIjoxNzEwMTU5NzQyLCJpYXQiOiIyMDI0LTAzLTExVDE2OjIyOjIyLjM5MDQ2MDgrMDc6MDAifQ.Vl8cBQ3SESsTVwNNtvDYbetYwd3xmllMWDOaLe17uy0"
+        '400':
+          $ref: '#/components/responses/400'
+        '500':
+          $ref: '#/components/responses/500'
+  /register:
+    post:
+      tags:
+        - user
+      summary: "user register"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Register'
+            example:
+              name: "bagir"
+              email: "bagir@mail.com"
+              hp: "0859184060214"
+              password: "12345678"
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '500':
+          $ref: '#/components/responses/500'
+  /profile:
+    get:
+      tags:
+        - user
+      security: 
+        - bearerAuth: []
+      summary: get profile user
+      responses:
+        '200':
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: uint
+                  message:
+                    type: string
+                  user:
+                    type: object
+                    properties:
+                      ID:
+                        type: integer
+                        format: uint
+                      CreatedAt: 
+                        type: string
+                      UpdatedAt: 
+                        type: string
+                      Name: 
+                        type: string
+                      Email: 
+                        type: string
+                      Hp: 
+                        type: string
+              example: 
+                code: 200
+                message: "success get user profile"
+                user: 
+                  ID: 23
+                  CreatedAt: "2024-03-10T15:34:09.224+07:00"
+                  UpdatedAt: "2024-03-10T15:34:09.224+07:00"
+                  Name: "bagir"
+                  Email: "bagir@mail.com"
+                  Hp: "0859184060214"
+        '401':
+          $ref: '#/components/responses/401'
+        '500':
+          $ref: '#/components/responses/500'
+  /activity:
+    post:
+      tags:
+        - activity
+      security: 
+        - bearerAuth: []
+      summary: "add activity"
+      requestBody:
+        $ref: '#/components/requestBodies/Activity'
+      responses:
+        '200':
+          description: "success registered"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              example: 
+                code: 200
+                message: "success add activity"
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '500':
+          $ref: '#/components/responses/500'
+    get:
+      tags:
+        - activity
+      security: 
+        - bearerAuth: []
+      summary: get all activity
+      responses:
+        '200':
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: uint
+                  message:
+                    type: string
+                  activities:
+                    type: object
+                    format: array
+              example: 
+                code: 200
+                message: "success get all activities"
+                activities:
+                  - ID: 6
+                    Activity: "olahraga"
+                  - ID: 7
+                    Activity: "makan"
+        '401':
+          $ref: '#/components/responses/401'
+        '500':
+          $ref: '#/components/responses/500'
+  /activity/{activityID}:
+    put:
+      tags:
+        - activity
+      security: 
+        - bearerAuth: []
+      parameters: 
+        - name: activityID
+          in: path
+          required: true
+          schema:
+            type: string
+          example: 10
+      summary: "edit select activity"
+      requestBody:
+        $ref: '#/components/requestBodies/Activity'
+      responses:
+        '200':
+          description: "success registered"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              example: 
+                code: 200
+                message: "success change activity"
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '500':
+          $ref: '#/components/responses/500'
+    delete:
+      tags:
+        - activity
+      security: 
+        - bearerAuth: []
+      parameters: 
+        - name: activityID
+          in: path
+          required: true
+          schema:
+            type: string
+          example: 10
+      summary: "delete select activity"
+      responses:
+        '200':
+          description: "success registered"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              example: 
+                code: 200
+                message: "success delete activity"
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '500':
+          $ref: '#/components/responses/500'
+components:
+  schemas:
+    Login:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+    Register:
+      type: object
+      required:
+        - name
+        - email
+        - hp
+        - password
+      properties:
+        id:
+          type: integer
+          format: uint
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+          uniqueItems: true
+        hp:
+          type: string
+          format: hp
+          uniqueItems: true
+        password:
+          type: string
+          format: password
+          minLength: 8
+    Activity:
+      type: object
+      required:
+        - activity
+      properties:
+        activity:
+          type: string
+    ApiResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: uint32
+        message:
+          type: string
+  requestBodies:
+    Activity:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Activity'
+          example:
+            activity: "olahraga"
+      required: true
+  responses:
+    '201':
+          description: "success registered"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              example: 
+                code: 201
+                message: "Congratulations, the data has been registered"
+    '400':
+      description: "Bad Required"
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiResponse'
+          example: 
+            code: 400
+            message: "the data sent is incorrect"
+    '401':
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+              example:
+                message: "invalid or expired jwt"
+    '500':
+      description: "server error"
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiResponse'
+          example:
+            code: 500
+            message: "an error occurred in the server process"
+  securitySchemes:
+    bearerAuth:            
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
