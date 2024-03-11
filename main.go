@@ -2,8 +2,12 @@ package main
 
 import (
 	"BelajarAPI/config"
-	"BelajarAPI/controller"
-	"BelajarAPI/model"
+	ad "BelajarAPI/features/activity/data"
+	ah "BelajarAPI/features/activity/handler"
+	as "BelajarAPI/features/activity/services"
+	"BelajarAPI/features/user/data"
+	"BelajarAPI/features/user/handler"
+	"BelajarAPI/features/user/services"
 	"BelajarAPI/routes"
 
 	"github.com/labstack/echo/v4"
@@ -11,21 +15,21 @@ import (
 )
 
 func main() {
-	e := echo.New()
-	cfg := config.InitConfig()
-	db := config.InitSQL(cfg)
+	e := echo.New()            // inisiasi echo
+	cfg := config.InitConfig() // baca seluruh system variable
+	db := config.InitSQL(cfg)  // konek DB
 
-	um := model.User(db)
-	uc := controller.User(um)
-	am := model.Activity(db)
-	ac := controller.Activity(am)
+	userData := data.New(db)
+	userService := services.NewService(userData)
+	userHandler := handler.NewUserHandler(userService)
 
-	// config.Migrate(db, um.User)
-	// config.Migrate(db, am.Activity)
+	activityData := ad.New(db)
+	activityService := as.NewActivityService(activityData)
+	activityHandler := ah.NewHandler(activityService)
 
 	e.Pre(middleware.RemoveTrailingSlash())
-	// e.Use(middleware.Logger())
-	e.Use(middleware.CORS())
-	routes.InitRoute(e, uc, ac)
+	e.Use(middleware.Logger())
+	e.Use(middleware.CORS()) // ini aja cukup
+	routes.InitRoute(e, userHandler, activityHandler)
 	e.Logger.Fatal(e.Start("127.0.0.1:8000"))
 }

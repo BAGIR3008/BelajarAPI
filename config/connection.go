@@ -1,8 +1,8 @@
 package config
 
 import (
-	"BelajarAPI/model/activity"
-	"BelajarAPI/model/user"
+	"BelajarAPI/features/activity"
+	"BelajarAPI/features/user"
 	"fmt"
 	"os"
 
