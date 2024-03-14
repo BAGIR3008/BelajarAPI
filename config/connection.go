@@ -48,7 +48,11 @@ func AssignEnv(c AppConfig) (AppConfig, bool) {
 	} else {
 		missing = true
 	}
-
+	if val, found := os.LookupEnv("JWT_SECRET"); found {
+		JWTSECRET = val
+	} else {
+		missing = true
+	}
 	return c, missing
 }
 
