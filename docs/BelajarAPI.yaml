@@ -11,8 +11,10 @@ servers:
   # Added by API Auto Mocking Plugin
   - description: SwaggerHub API Auto Mocking
     url: https://virtserver.swaggerhub.com/BAGIR3008/activityAPI/1.0.0
+  - description: Public API
+    url: https://54.255.24.24:1323/
   - description: local development
-    url: 'localhost:8000/'
+    url: 'localhost:1323/'
   - description: production
     url: 'https://domainkalian.net/{versi}'
     variables:

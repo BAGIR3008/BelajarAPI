@@ -31,5 +31,5 @@ func main() {
 	e.Use(middleware.Logger())
 	e.Use(middleware.CORS()) // ini aja cukup
 	routes.InitRoute(e, userHandler, activityHandler)
-	e.Logger.Fatal(e.Start("127.0.0.1:8000"))
+	e.Logger.Fatal(e.Start(":1323"))
 }
